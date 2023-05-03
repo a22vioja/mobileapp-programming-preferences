@@ -27,6 +27,12 @@ public class MainActivity extends AppCompatActivity {
         TextView prefTextRef=new TextView(this);
         prefTextRef=(TextView)findViewById(R.id.prefText);
         prefTextRef.setText(myPreferenceRef.getString("MyAppPreferenceString", "No preference found."));
+
+        SharedPreferences myPreferenceRef = getSharedPreferences("MyPreferencesName", MODE_PRIVATE);
+        SharedPreferences.Editor myPreferenceEditor = myPreferenceRef.edit();
+        myPreferenceRef = getPreferences(MODE_PRIVATE);
+        myPreferenceEditor = myPreferenceRef.edit();
+
     }
 
     public void savePref(View v){
@@ -45,5 +51,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Clear the EditText
         newPrefText.setText("");
+
     }
 }
