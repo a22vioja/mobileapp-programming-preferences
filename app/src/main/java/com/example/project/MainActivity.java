@@ -1,5 +1,6 @@
 package com.example.project;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Clear the EditText
         newPrefText.setText("");
+
 
     }
 }
