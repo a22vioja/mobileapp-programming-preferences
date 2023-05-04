@@ -149,16 +149,21 @@ On DisplayMessageActivity (and on MainActivity) I made able to read the data be 
         }
 ```
 
+I also added back button from DisplayMessageActivity by adding this line in AndroidManifest.xml file.
+```
+android:parentActivityName=".MainActivity"
+```
+
 When we run the app we see the old entered text because it is saved in Shared preferences. This is
 my App view when the button is clicked (1), when we go back to the MainActivity(2,3) and when 
 Appen is closed and opened again(4).
 1.
-![](1.png);
+![](1.png)
 2.
-![](2.png);
+![](2.png)
 3.
-![](3.png);
+![](3.png)
 4.
-![](4.png);
+![](4.png)
 
 
