@@ -40,11 +40,11 @@ I also added reference to the string recourse in the strings.xml file:
 ```
 <string name="save">save</string>
 ```
-I created a preferenc object in Main Activity class and added code to the onCreate method to get
+I created a preference object in Main Activity class and added code to the onCreate method to get
 an instance if a SharedPreference
 ```
- private SharedPreferences myPreferenceRef;
- private SharedPreferences.Editor myPreferenceEditor;
+ myPrefRef = getSharedPreferences("preferences", MODE_PRIVATE);
+ myEdit = findViewById(R.id.settingseditview);
   
   
  protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +95,70 @@ myPreferenceEditor = myPreferenceRef.edit();
     }
 ```
 
-When we run the app we see the old entered text because it is saved in Shared preferences. This is
-my App view before and after closing the App.
+BASED ON THIS PROJECT I MANAGED TO GET MY SHARED PREFERENCES ON THE SAME ACTIVITY, BUT NOT ON THE 
+SECOND. SO I MADE FEW CHANGES ON FEW LAST COMMITS TO MANAGE GET THE DATA ON THE SECOND ACTIVITY AND 
+ON THE MAIN.
 
-![](first.png)
-![](second.png)
+I also changed the variable names wich were to complicated:
+```
+     //On MainActivity
+     myPrefRef = getSharedPreferences("preferences", MODE_PRIVATE);
+     myEdit = findViewById(R.id.settingseditview);
+     
+     //On DisplayMessageActivity
+     private SharedPreferences sharedPref;
+     private TextView text;
+```
+
+I overwrote the previous code part in Main activity to be able to write data 
+to Shared Preferences using EditText. I also created a button and SharedPreferences.Editor to be able
+to modify values. All changes in an editor are batched, and not copied back to the original
+SharedPreferences until apply() method is called.
+
+```
+    Button button3 = findViewById(R.id.prefButton);
+    button3.setOnClickListener(new View.OnClickListener() {
+   
+        public void onClick(View v) {
+            SharedPreferences.Editor editor = myPrefRef.edit();
+            editor.putString("MyAppPreferenceString", myEdit.getText().toString());
+            editor.apply();
+    
+            Intent intent = new Intent(MainActivity.this, DisplayMessageActivity.class);
+            startActivity(intent);
+            Log.d("TAG", "onClick: ");
+        }
+    });
+```
+
+On DisplayMessageActivity (and on MainActivity) I made able to read the data be setting the content view onCreate method
+,finding the text variable by the ID and setting text in TextView widget.
+
+```
+    @SuppressLint("ResourceType")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_display_message);
+        text = findViewById(R.id.prefText);
+        sharedPref = getSharedPreferences("preferences", MODE_PRIVATE);
+        String name = sharedPref.getString("MyAppPreferenceString", "null");
+        text.setText(name);
+        Log.d("==>", name);
+    
+        }
+```
+
+When we run the app we see the old entered text because it is saved in Shared preferences. This is
+my App view when the button is clicked (1), when we go back to the MainActivity(2,3) and when 
+Appen is closed and opened again(4).
+1.
+![](1.png);
+2.
+![](2.png);
+3.
+![](3.png);
+4.
+![](4.png);
+
+

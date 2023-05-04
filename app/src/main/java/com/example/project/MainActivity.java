@@ -33,10 +33,11 @@ public class MainActivity extends AppCompatActivity {
         Button button3 = findViewById(R.id.prefButton);
         button3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // savePref();
+
                 SharedPreferences.Editor editor = myPrefRef.edit();
                 editor.putString("MyAppPreferenceString", myEdit.getText().toString());
                 editor.apply();
+
                 Intent intent = new Intent(MainActivity.this, DisplayMessageActivity.class);
                 startActivity(intent);
                 Log.d("TAG", "onClick: ");
