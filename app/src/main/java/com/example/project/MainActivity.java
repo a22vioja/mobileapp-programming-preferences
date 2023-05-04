@@ -1,9 +1,12 @@
 package com.example.project;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -12,8 +15,10 @@ import androidx.appcompat.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity {
 
-    private SharedPreferences myPreferenceRef;
+    private SharedPreferences myPrefRef;
     private SharedPreferences.Editor myPreferenceEditor;
+    private EditText myEdit;
+    private TextView myText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,38 +27,30 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        myPreferenceRef = getPreferences(MODE_PRIVATE);
-        myPreferenceEditor = myPreferenceRef.edit();
+        myPrefRef = getSharedPreferences("preferences", MODE_PRIVATE);
+        myEdit = findViewById(R.id.settingseditview);
 
-        TextView prefTextRef=new TextView(this);
-        prefTextRef=(TextView)findViewById(R.id.prefText);
-        prefTextRef.setText(myPreferenceRef.getString("MyAppPreferenceString", "No preference found."));
-
+        Button button3 = findViewById(R.id.prefButton);
+        button3.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // savePref();
+                SharedPreferences.Editor editor = myPrefRef.edit();
+                editor.putString("MyAppPreferenceString", myEdit.getText().toString());
+                editor.apply();
+                Intent intent = new Intent(MainActivity.this, DisplayMessageActivity.class);
+                startActivity(intent);
+                Log.d("TAG", "onClick: ");
+            }
+        });
     }
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences myPreferenceRef = getSharedPreferences("MyPreferencesName", MODE_PRIVATE);
-        SharedPreferences.Editor myPreferenceEditor = myPreferenceRef.edit();
-        myPreferenceRef = getPreferences(MODE_PRIVATE);
-        myPreferenceEditor = myPreferenceRef.edit();
-    }
-    public void savePref(View v){
-        // Get the text
-        EditText newPrefText=new EditText(this);
-        newPrefText=(EditText)findViewById(R.id.settingseditview);
-
-        // Store the new preference
-        myPreferenceEditor.putString("MyAppPreferenceString", newPrefText.getText().toString());
-        myPreferenceEditor.apply();
-
-        // Display the new preference
-        TextView prefTextRef=new TextView(this);
-        prefTextRef=(TextView)findViewById(R.id.prefText);
-        prefTextRef.setText(myPreferenceRef.getString("MyAppPreferenceString", "No preference found."));
-
-        // Clear the EditText
-        newPrefText.setText("");
-
+        myText = findViewById(R.id.prefText);
+        myPrefRef = getSharedPreferences("preferences", MODE_PRIVATE);
+        String name = myPrefRef.getString("MyAppPreferenceString", "null");
+        myText.setText(name);
     }
 }
+
+
